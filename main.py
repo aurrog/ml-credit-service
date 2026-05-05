@@ -16,12 +16,12 @@ def health():
 def predict():
     try:
         data = request.get_json()
-        result = model_handler.predict(data)
+        if data is None:
+            return jsonify({'error': 'JSON body is required'}), 400
 
-        return jsonify({
-            **result,
-            "model_version": "v1"
-        })
+        result = model_handler.predict(data)
+        return jsonify(result)
+
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
